@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="src/sass/main.scss" />
     <script defer src="src/js/controller.js"></script>
 
-    <title>PrepIt // Search over 1,000,000 recipes</title>
+    <title>PrepIt - Your Ultimate Recipe Search Engine</title>
   </head>
 
   <body>
@@ -56,7 +56,7 @@
                       </svg>
                     </div>
                     <p>
-                      No bookmarks yet. Find a nice recipe and bookmark it :)
+                      You haven't added any bookmarks yet! Find a nice recipe and start bookmarking.
                     </p>
                   </div>
 
@@ -125,14 +125,12 @@
               <use href="src/img/icons.svg#icon-smile"></use>
             </svg>
           </div>
-          <p>Start by searching for a recipe or an ingredient. Have fun!</p>
-        </div>
+          <p>
+            Discover your next favorite recipe by searching for dishes or ingredients.
+            Try searching for a specific recipe to get started!
+          </p>
 
-        <!-- <div class="spinner">
-          <svg>
-            <use href="src/img/icons.svg#icon-loader"></use>
-          </svg>
-        </div> -->
+        </div>
 
         <!-- <div class="error">
             <div>
@@ -264,18 +262,18 @@
         <div class="upload__column">
           <h3 class="upload__heading">Ingredients</h3>
           <label>Ingredient 1</label>
-          <input value="0.5,kg,Rice" type="text" required name="ingredient-1"
-            placeholder="Format: 'Quantity,Unit,Description'" />
+          <input value="1,kg,Rice" type="text" required name="ingredient-1"
+            placeholder="'Quantity,Unit,Description'" />
           <label>Ingredient 2</label>
-          <input value="1,,Avocado" type="text" name="ingredient-2" placeholder="Format: 'Quantity,Unit,Description'" />
+          <input value="2,,Potato" type="text" name="ingredient-2" placeholder="'Quantity,Unit,Description'" />
           <label>Ingredient 3</label>
-          <input value=",,salt" type="text" name="ingredient-3" placeholder="Format: 'Quantity,Unit,Description'" />
+          <input value=",,Sugar" type="text" name="ingredient-3" placeholder="'Quantity,Unit,Description'" />
           <label>Ingredient 4</label>
-          <input type="text" name="ingredient-4" placeholder="Format: 'Quantity,Unit,Description'" />
+          <input type="text" name="ingredient-4" placeholder="'Quantity,Unit,Description'" />
           <label>Ingredient 5</label>
-          <input type="text" name="ingredient-5" placeholder="Format: 'Quantity,Unit,Description'" />
+          <input type="text" name="ingredient-5" placeholder="'Quantity,Unit,Description'" />
           <label>Ingredient 6</label>
-          <input type="text" name="ingredient-6" placeholder="Format: 'Quantity,Unit,Description'" />
+          <input type="text" name="ingredient-6" placeholder="'Quantity,Unit,Description'" />
         </div>
 
         <button class="btn upload__btn">
@@ -285,6 +283,7 @@
           <span>Upload</span>
         </button>
       </form>
+
     </div>
   </body>
 

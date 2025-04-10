@@ -3,7 +3,7 @@ import icons from 'url:../../img/icons.svg';
 
 class ResultsView extends View {
   _parentElement = document.querySelector('.results');
-  _errorMessage = 'No recipe available for the given query. Try again!';
+  _errorMessage = 'Sorry, we couldn\'t find any recipes for your search query. Please try again with different keywords.'
 
   // _generateMarkup() {
   //   return this._data.map(result => previewView.render(result, false)).join('');
