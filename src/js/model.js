@@ -10,6 +10,11 @@ export const state = {
     results: [],
     page: 1,
     resultsPerPage: RES_PER_PAGE,
+    dietFilters: {
+      vegetarian: false,
+      vegan: false,
+      glutenFree: false,
+    },
   },
   bookmarks: [],
 };
@@ -31,10 +36,116 @@ const createRecipeObject = function (data) {
   };
 };
 
+// Add a list of non-vegetarian ingredients
+const nonVegetarianIngredients = [
+  'beef', 'chicken', 'pork', 'lamb', 'veal', 'turkey', 'duck', 'goose', 'fish',
+  'salmon', 'tuna', 'cod', 'shrimp', 'prawn', 'crab', 'lobster', 'oyster', 'clam',
+  'mussel', 'squid', 'octopus', 'bacon', 'ham', 'sausage', 'pepperoni', 'steak',
+  'ground beef', 'ground pork', 'ground turkey', 'salami', 'anchovy', 'tilapia',
+  'halibut', 'venison', 'bison', 'quail', 'pheasant', 'meat', 'meatball', 'ribs',
+  'liver', 'kidney', 'tripe', 'bone marrow', 'bone broth', 'caviar', 'roe',
+  'gelatin', 'lard', 'suet', 'trout', 'mackerel', 'sardine', 'haddock', 'mahi mahi',
+  'sea bass', 'scallop', 'calamari', 'prosciutto', 'pancetta', 'chorizo', 'bologna',
+  'pastrami', 'corned beef', 'foie gras', 'hot dog', 'bratwurst', 'frankfurter',
+  'goat', 'lamb', 'veal', 'turkey', 'duck', 'goose', 'fish', 'salmon', 'tuna', 'cod', 'shrimp', 'prawn', 'crab', 'lobster', 'oyster', 'clam',
+];
+
+// List of non-vegan ingredients (including dairy and eggs)
+const nonVeganIngredients = [
+  ...nonVegetarianIngredients,
+  'milk', 'cheese', 'butter', 'cream', 'yogurt', 'egg', 'honey', 'whey', 'ghee',
+  'gelatin', 'mayonnaise', 'parmesan', 'mozzarella', 'cheddar', 'brie', 'ice cream',
+  'buttermilk', 'cottage cheese', 'ricotta', 'sour cream', 'custard', 'quark',
+  'casein', 'lactose', 'royal jelly', 'egg white', 'egg yolk', 'albumin',
+  'eggnog', 'feta', 'gouda', 'mascarpone', 'provolone', 'romano', 'blue cheese',
+  'camembert', 'condensed milk', 'evaporated milk', 'kefir', 'goat milk',
+  'heavy cream', 'half-and-half', 'skyr', 'frosting', 'meringue', 'hollandaise',
+  'aioli', 'béarnaise sauce', 'crème fraîche', 'whipped cream', 'milkshake'
+];
+
+// List of gluten-containing ingredients
+const glutenIngredients = [
+  'wheat', 'flour', 'barley', 'rye', 'malt', 'bread', 'pasta', 'couscous',
+  'semolina', 'spelt', 'durum', 'matzo', 'graham', 'seitan', 'bulgur',
+  'farina', 'soy sauce', 'wheat germ', 'wheat bran', 'wheat starch',
+  'cake flour', 'all-purpose flour', 'bread flour', 'pastry flour',
+  'noodles', 'cracker', 'cookie', 'pretzel', 'wafer', 'cereal', 'beer',
+  'ale', 'lager', 'whiskey', 'bourbon', 'rye whiskey', 'farro',
+  'orzo', 'panko', 'crouton', 'biscuit', 'croissant', 'bagel',
+  'pita', 'tortilla', 'udon', 'ramen', 'soba', 'triticale',
+  'kamut', 'einkorn', 'emmer', 'wheat berries', 'crumbs', 'batter'
+];
+
+// Our current loaded recipe with ingredients
+let loadedRecipeCache = {};
+
+// Function to check if a recipe is vegetarian based on its ingredients
+const isVegetarian = function (recipe) {
+  // If we don't have the recipe's ingredients loaded yet, we'll need to check the cache
+  if (loadedRecipeCache[recipe.id]) {
+    // Use cached recipe data with ingredients
+    const ingredients = loadedRecipeCache[recipe.id].ingredients;
+    if (!ingredients) return true; // If no ingredients data, assume it is vegetarian
+
+    // Check if any ingredient matches non-vegetarian list
+    return !ingredients.some(ingredient => {
+      const description = ingredient.description.toLowerCase();
+      return nonVegetarianIngredients.some(item => description.includes(item));
+    });
+  }
+
+  // If we don't have the recipe in cache, we'll make our best guess from the title
+  const title = recipe.title.toLowerCase();
+  return !nonVegetarianIngredients.some(item => title.includes(item));
+};
+
+// Function to check if a recipe is vegan
+const isVegan = function (recipe) {
+  // If we don't have the recipe's ingredients loaded yet, we'll need to check the cache
+  if (loadedRecipeCache[recipe.id]) {
+    // Use cached recipe data with ingredients
+    const ingredients = loadedRecipeCache[recipe.id].ingredients;
+    if (!ingredients) return true; // If no ingredients data, assume it is vegan
+
+    // Check if any ingredient matches non-vegan list
+    return !ingredients.some(ingredient => {
+      const description = ingredient.description.toLowerCase();
+      return nonVeganIngredients.some(item => description.includes(item));
+    });
+  }
+
+  // If we don't have the recipe in cache, we'll make our best guess from the title
+  const title = recipe.title.toLowerCase();
+  return !nonVeganIngredients.some(item => title.includes(item));
+};
+
+// Function to check if a recipe is gluten-free
+const isGlutenFree = function (recipe) {
+  // If we don't have the recipe's ingredients loaded yet, we'll need to check the cache
+  if (loadedRecipeCache[recipe.id]) {
+    // Use cached recipe data with ingredients
+    const ingredients = loadedRecipeCache[recipe.id].ingredients;
+    if (!ingredients) return true; // If no ingredients data, assume it is gluten-free
+
+    // Check if any ingredient matches gluten list
+    return !ingredients.some(ingredient => {
+      const description = ingredient.description.toLowerCase();
+      return glutenIngredients.some(item => description.includes(item));
+    });
+  }
+
+  // If we don't have the recipe in cache, we'll make our best guess from the title
+  const title = recipe.title.toLowerCase();
+  return !glutenIngredients.some(item => title.includes(item));
+};
+
 export const loadRecipe = async function (id) {
   try {
     const data = await AJAX(`${API_URL}${id}?key=${KEY}`);
     state.recipe = createRecipeObject(data);
+
+    // Cache this recipe for future dietary checks
+    loadedRecipeCache[id] = state.recipe;
 
     if (state.bookmarks.some(bookmark => bookmark.id === id))
       state.recipe.bookmarked = true;
@@ -69,13 +180,78 @@ export const loadSearchResults = async function (query) {
   }
 };
 
+export const toggleDietFilter = function (filterType) {
+  state.search.dietFilters[filterType] = !state.search.dietFilters[filterType];
+  return state.search.dietFilters[filterType];
+};
+
+export const getFilteredResults = function () {
+  // If results are empty, return empty array
+  if (!state.search.results || state.search.results.length === 0) {
+    console.log('No search results to filter');
+    state.search.filteredCount = 0;
+    return [];
+  }
+  
+  // If diet filters object is missing, fix it
+  if (!state.search.dietFilters) {
+    state.search.dietFilters = {
+      vegetarian: false,
+      vegan: false,
+      glutenFree: false,
+    };
+  }
+  
+  // If no filters are active, return all results
+  const { vegetarian, vegan, glutenFree } = state.search.dietFilters;
+  console.log('Active filters:', { vegetarian, vegan, glutenFree });
+  
+  if (!vegetarian && !vegan && !glutenFree) {
+    console.log('No filters active, returning all results:', state.search.results.length);
+    state.search.filteredCount = state.search.results.length;
+    return state.search.results;
+  }
+  
+  // Apply dietary filters based on our ingredient checking functions
+  const filteredResults = state.search.results.filter(recipe => {
+    if (vegetarian && !isVegetarian(recipe)) {
+      return false;
+    }
+    
+    if (vegan && !isVegan(recipe)) {
+      return false;
+    }
+    
+    if (glutenFree && !isGlutenFree(recipe)) {
+      return false;
+    }
+    
+    return true;
+  });
+  
+  console.log(`Filtered results: ${filteredResults.length} of ${state.search.results.length}`);
+  state.search.filteredCount = filteredResults.length;
+  return filteredResults;
+};
+
 export const getSearchResultsPage = function (page = state.search.page) {
   state.search.page = page;
 
-  const start = (page - 1) * state.search.resultsPerPage; // 0
-  const end = page * state.search.resultsPerPage; // 9
+  // Get filtered results
+  const filteredResults = getFilteredResults();
+  
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredResults.length / state.search.resultsPerPage);
+  
+  // If current page is greater than total pages and total pages > 0, reset to page 1
+  if (state.search.page > totalPages && totalPages > 0) {
+    state.search.page = 1;
+  }
 
-  return state.search.results.slice(start, end);
+  const start = (state.search.page - 1) * state.search.resultsPerPage;
+  const end = state.search.page * state.search.resultsPerPage;
+
+  return filteredResults.slice(start, end);
 };
 
 export const updateServings = function (newServings) {

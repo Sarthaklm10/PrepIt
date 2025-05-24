@@ -12,16 +12,43 @@ export default class View {
    * @author Sarthak
    */
   render(data, render = true) {
-    if (!data || (Array.isArray(data) && data.length === 0))
+    if (!this._parentElement) {
+      console.error(`Parent element not found for ${this.constructor.name}`);
+      return;
+    }
+    
+    // If this is RecipeView and no data (initial state), show welcome page
+    if (this.constructor.name === 'RecipeView' && !data) {
+      const markup = this._generateWelcomeMarkup();
+      this._clear();
+      this._parentElement.insertAdjacentHTML('afterbegin', markup);
+      return;
+    }
+
+    // Don't treat empty objects as missing data
+    const dataIsMissing = 
+      data === undefined || 
+      data === null || 
+      (Array.isArray(data) && data.length === 0);
+    
+    if (dataIsMissing) {
+      console.log(`No data provided to render for ${this.constructor.name}, showing error`);
       return this.renderError();
+    }
 
     this._data = data;
-    const markup = this._generateMarkup();
+    
+    try {
+      const markup = this._generateMarkup();
 
-    if (!render) return markup;
+      if (!render) return markup;
 
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+      this._clear();
+      this._parentElement.insertAdjacentHTML('afterbegin', markup);
+    } catch (error) {
+      console.error(`Error rendering view for ${this.constructor.name}:`, error);
+      this.renderError('Something went wrong. Please try again.');
+    }
   }
 
   /**
@@ -30,32 +57,44 @@ export default class View {
    * @this {View}
    */
   update(data) {
+    if (!this._parentElement) {
+      console.error('Parent element not found');
+      return;
+    }
+    
+    if (!data) return;
+    
     this._data = data;
-    const newMarkup = this._generateMarkup();
+    
+    try {
+      const newMarkup = this._generateMarkup();
 
-    // Convert string to new DOM object(virtual DOM)
-    const newDOM = document.createRange().createContextualFragment(newMarkup);
-    const newElements = Array.from(newDOM.querySelectorAll('*'));
-    const curElements = Array.from(this._parentElement.querySelectorAll('*'));
+      // Convert string to new DOM object(virtual DOM)
+      const newDOM = document.createRange().createContextualFragment(newMarkup);
+      const newElements = Array.from(newDOM.querySelectorAll('*'));
+      const curElements = Array.from(this._parentElement.querySelectorAll('*'));
 
-    newElements.forEach((newEl, i) => {
-      const curEl = curElements[i];
-      // console.log(curEl, newEl.isEqualNode(curEl));
+      newElements.forEach((newEl, i) => {
+        const curEl = curElements[i];
+        if (!curEl) return;
+        
+        // Update the textcontent of the current element
+        if (
+          !newEl.isEqualNode(curEl) &&
+          newEl.firstChild?.nodeValue.trim() !== ''
+        ) {
+          curEl.textContent = newEl.textContent;
+        }
 
-      // Update the textcontent of the current element
-      if (
-        !newEl.isEqualNode(curEl) &&
-        newEl.firstChild?.nodeValue.trim() !== ''
-      ) {
-        curEl.textContent = newEl.textContent;
-      }
-
-      // Update attributes of current elt
-      if (!newEl.isEqualNode(curEl))
-        Array.from(newEl.attributes).forEach(attr =>
-          curEl.setAttribute(attr.name, attr.value)
-        );
-    });
+        // Update attributes of current elt
+        if (!newEl.isEqualNode(curEl))
+          Array.from(newEl.attributes).forEach(attr =>
+            curEl.setAttribute(attr.name, attr.value)
+          );
+      });
+    } catch (error) {
+      console.error('Error updating view:', error);
+    }
   }
 
   /**
@@ -64,7 +103,8 @@ export default class View {
    * @this {View}
    */
   _clear() {
-    this._parentElement.innerHTML = '';
+    if (this._parentElement)
+      this._parentElement.innerHTML = '';
   }
 
   /**
@@ -72,6 +112,8 @@ export default class View {
      * @this {View}
      */
   renderSpinner() {
+    if (!this._parentElement) return;
+    
     const markup = `
       <div class="spinner">
         <svg>
@@ -88,6 +130,10 @@ export default class View {
     * @this {View}
     */
   renderError(message = this._errorMessage) {
+    if (!this._parentElement) return;
+    
+    console.log(`Rendering error in ${this.constructor.name}: "${message}"`);
+    
     const markup = `
       <div class="error">
         <div>
@@ -95,7 +141,7 @@ export default class View {
             <use href="${icons}#icon-alert-triangle"></use>
           </svg>
         </div>
-        <p>${message}</p>
+        <p>${message || 'An error occurred. Please try again.'}</p>
       </div>
     `;
     this._clear();

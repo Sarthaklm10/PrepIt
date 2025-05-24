@@ -1,19 +1,56 @@
-// $color-primary: #f59a83;
-$color-primary: #f38e82;
-$color-grad-1: #fbdb89;
-$color-grad-2: #f48982;
+// Light Mode Colors
+$color-primary: #2563eb; // Royal Blue
+$color-primary-light: #3b82f6; // Lighter Blue
+$color-primary-dark: #1d4ed8; // Darker Blue
 
-$color-grey-light-1: #f9f5f3; // Light background
-$color-grey-light-2: #f2efee; // Light lines
-$color-grey-light-3: #d3c7c3; // Light text (placeholder)
-$color-grey-dark-1: #615551; // Normal text
-$color-grey-dark-2: #918581; // Lighter text
+// Gradients
+$gradient: linear-gradient(135deg, $color-primary-light, $color-primary);
+$bg-gradient: linear-gradient(135deg, #dbeafe, #eff6ff);
 
-$gradient: linear-gradient(to right bottom, $color-grad-1, $color-grad-2);
+// Theme Colors
+:root {
+  // Light Mode (default)
+  --color-primary: #{$color-primary};
+  --color-primary-light: #{$color-primary-light};
+  --color-primary-dark: #{$color-primary-dark};
+  
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #f1f5f9;
+  
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #64748b;
+  
+  --color-border: #e2e8f0;
+  --color-shadow: rgba(15, 23, 42, 0.1);
+  
+  --gradient: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+  --bg-gradient: linear-gradient(135deg, #dbeafe, #eff6ff);
+}
 
+// Dark Mode
+[data-theme="dark"] {
+  --color-primary: #{$color-primary-light};
+  --color-primary-light: #{lighten($color-primary-light, 10%)};
+  --color-primary-dark: #{$color-primary};
+  
+  --color-bg-primary: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-bg-tertiary: #334155;
+  
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #e2e8f0;
+  --color-text-tertiary: #cbd5e1;
+  
+  --color-border: #334155;
+  --color-shadow: rgba(0, 0, 0, 0.3);
+  
+  --gradient: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+  --bg-gradient: linear-gradient(135deg, #1e293b, #0f172a);
+}
 
-// background-image: linear-gradient(to right bottom, #89eda1, green);
-
+// Breakpoints
 $bp-large: 78.15em; // 1250px
 $bp-medium: 61.25em; // 980px
 $bp-small: 37.5em; // 600px
@@ -33,6 +70,8 @@ $bp-smallest: 31.25em; // 500px
 html {
   box-sizing: border-box;
   font-size: 62.5%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 
   @media only screen and (max-width: $bp-medium) {
     font-size: 50%;
@@ -40,35 +79,104 @@ html {
 }
 
 body {
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Kanit', sans-serif;
   font-weight: 400;
   line-height: 1.6;
-  color: $color-grey-dark-1;
-  background-image: linear-gradient(to right bottom, #89eda1, green);
+  color: var(--color-text-primary);
+  background: var(--bg-gradient);
   background-size: cover;
   background-repeat: no-repeat;
   min-height: calc(100vh - 2 * 4vw);
+  transition: all 0.3s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .container {
   max-width: 120rem;
   min-height: 117rem;
+  border-radius: 12px;
+  overflow: visible;
   margin: 4vw auto;
-  background-color: #fff;
-  border-radius: 9px;
-  overflow: hidden;
-  box-shadow: 0 2rem 6rem 0.5rem rgba($color-grey-dark-1, 0.2);
+  background-color: var(--color-bg-primary);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1rem 3rem var(--color-shadow);
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  max-height: none;
 
+  /* Default grid layout (for search mode) */
   display: grid;
   grid-template-rows: 10rem minmax(100rem, auto);
   grid-template-columns: 1fr 2fr;
-  grid-template-areas:
-    'head head'
-    'list recipe';
+  grid-template-areas: 
+    "head head"
+    "list recipe";
+
+  /* Fullscreen mode (applied when .fullscreen-mode class is present) */
+  &.fullscreen-mode {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "head"
+      "recipe";
+
+    .search-results {
+      display: none;
+    }
+
+    .recipe {
+      grid-column: 1;
+    }
+  }
 
   @media only screen and (max-width: $bp-large) {
     max-width: 100%;
     margin: 0;
     border-radius: 0;
   }
+
+  /* Add transition property */
+  transition: opacity 0.3s ease, grid-template-columns 0.3s ease;
+  
+  /* Add fading class for animation */
+  &.fading {
+    opacity: 0.7;
+  }
+}
+
+/* Adjust search results panel width */
+.search-results {
+  padding: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-primary);
+  border-right: 1px solid var(--color-border);
+  width: 100%; /* Make it use full width of its grid area */
+  min-width: 35rem; /* Ensure minimum width */
+}
+
+/* Fix scrollbar issue */
+html, body {
+  overflow-x: hidden;
+}
+
+body {
+  /* Keep existing styles */
+  overflow-y: auto; /* Main scrollbar */
+}
+
+.recipe, .search-results, .welcome-section {
+  overflow: visible; /* Prevent double scrollbar */
+}
+
+/* Add only these rules to fix scrolling */
+.recipe {
+  overflow: visible;
+}
+
+.search-results {
+  overflow: visible ;
+}
+
+.welcome-section {
+  overflow: visible;
 }

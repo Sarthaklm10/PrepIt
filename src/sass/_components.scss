@@ -1,71 +1,72 @@
 %btn {
-  background-image: linear-gradient(to right bottom, #89eda1, green);
+  background-image: var(--gradient);
   border-radius: 10rem;
   border: none;
+  display: flex;
+  align-items: center;
   text-transform: uppercase;
   color: #fff;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: all 0.3s;
+  transition: all 0.3s ease-in-out;
 
   &:hover {
     transform: scale(1.05);
+    box-shadow: 0 0.4rem 1rem var(--color-shadow);
+  }
+
+  &:active {
+    transform: scale(1);
   }
 
   &:focus {
     outline: none;
   }
 
-  &>*:first-child {
+  & > *:first-child {
     margin-right: 1rem;
   }
 }
 
 .btn {
   @extend %btn;
-
-  padding: 1.5rem 4rem;
-  font-size: 1.5rem;
-  font-weight: 600;
+  padding: 1.55rem 4rem;
+  font-size: 1.55rem;
+  font-weight: 500;
 
   svg {
     height: 2.25rem;
     width: 2.25rem;
-    fill: green;
+    fill: currentColor;
   }
 }
 
 .btn--small {
-
   &,
   &:link,
   &:visited {
     @extend %btn;
-
     font-size: 1.4rem;
-    font-weight: 600;
+    font-weight: 500;
     padding: 1.25rem 2.25rem;
     text-decoration: none;
 
     svg {
       height: 1.75rem;
       width: 1.75rem;
-      fill: green;
+      fill: currentColor;
     }
   }
 }
 
 .btn--inline {
-  color: green;
+  color: var(--color-primary);
   font-size: 1.3rem;
-  font-weight: 600;
+  font-weight: 500;
   border: none;
-  background-color: $color-grey-light-1;
+  background-color: var(--color-bg-secondary);
   padding: 0.8rem 1.2rem;
   border-radius: 10rem;
   cursor: pointer;
-
   display: flex;
   align-items: center;
   transition: all 0.3s;
@@ -73,7 +74,7 @@
   svg {
     height: 1.6rem;
     width: 1.6rem;
-    fill: green;
+    fill: currentColor;
     margin: 0 0.2rem;
   }
 
@@ -82,8 +83,10 @@
   }
 
   &:hover {
-    color: rgb(52, 217, 52);
-    background-color: $color-grey-light-2;
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-primary-dark);
+    transform: scale(1.05);
+    box-shadow: 0 0.2rem 0.5rem var(--color-shadow);
   }
 
   &:focus {
@@ -92,21 +95,20 @@
 }
 
 .btn--round {
-  background-image: linear-gradient(to right bottom, #89eda1, green);
+  background-image: var(--gradient);
   border-radius: 50%;
   border: none;
   cursor: pointer;
   height: 4.5rem;
   width: 4.5rem;
-  // margin-left: auto;
   transition: all 0.3s;
-
   display: flex;
   align-items: center;
   justify-content: center;
 
   &:hover {
-    transform: scale(1.07);
+    transform: scale(1.08);
+    box-shadow: 0 0.4rem 1rem var(--color-shadow);
   }
 
   &:focus {
@@ -130,7 +132,7 @@
   svg {
     height: 100%;
     width: 100%;
-    fill: green;
+    fill: var(--color-primary);
     transition: all 0.4s;
   }
 
@@ -139,13 +141,13 @@
   }
 
   &:hover svg {
-    fill: rgb(52, 217, 52);
-    transform: translateY(-1px);
+    fill: var(--color-primary-dark);
+    transform: scale(1.1);
   }
 
   &:active svg {
-    fill: rgb(52, 217, 52);
-    transform: translateY(0);
+    fill: var(--color-primary-dark);
+    transform: scale(1);
   }
 
   &:not(:last-child) {
@@ -156,16 +158,15 @@
 .heading--2 {
   font-size: 2rem;
   font-weight: 700;
-  color: green;
+  color: var(--color-primary);
   text-transform: uppercase;
   margin-bottom: 2.5rem;
   text-align: center;
-  // transform: skewY(-3deg);
 }
 
 .link:link,
 .link:visited {
-  color: $color-grey-dark-2;
+  color: var(--color-text-secondary);
 }
 
 .spinner {
@@ -175,7 +176,7 @@
   svg {
     height: 6rem;
     width: 6rem;
-    fill: green;
+    fill: var(--color-primary);
     animation: rotate 2s infinite linear;
   }
 }
@@ -195,13 +196,12 @@
   max-width: 40rem;
   margin: 0 auto;
   padding: 5rem 4rem;
-
   display: flex;
 
   svg {
     height: 3rem;
     width: 3rem;
-    fill: green;
+    fill: var(--color-primary);
     transform: translateY(-0.3rem);
   }
 
@@ -209,6 +209,6 @@
     margin-left: 1.5rem;
     font-size: 1.8rem;
     line-height: 1.5;
-    font-weight: 600;
+    font-weight: 500;
   }
 }
