@@ -10,12 +10,19 @@
   "author": "Sarthak Baluni",
   "license": "ISC",
   "devDependencies": {
+    "@parcel/transformer-sass": "^2.15.4",
     "parcel": "^2.0.0-beta.1",
     "sass": "^1.26.10"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
     "core-js": "^3.6.5",
-    "fractional": "^1.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.17.0",
     "regenerator-runtime": "^0.13.7"
   }
 }

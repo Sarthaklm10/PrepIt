@@ -9,22 +9,41 @@ const timeout = function (s) {
   });
 };
 
-export const AJAX = async function (url, uploadData = undefined) {
+export const AJAX = async function (
+  url,
+  uploadData = undefined,
+  method = 'GET'
+) {
   try {
-    const fetchPro = uploadData
-      ? fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(uploadData),
-        })
-      : fetch(url);
+    const fetchOptions = {
+      method: uploadData ? 'POST' : method, // Use POST if data, otherwise use provided method
+      headers: {},
+    };
 
-    const res = await Promise.race([fetchPro, timeout(TIMEOUT_SEC)]);
+    if (uploadData) {
+      fetchOptions.headers['Content-Type'] = 'application/json';
+      fetchOptions.body = JSON.stringify(uploadData);
+    }
+
+    // Add this condition for DELETE method
+    if (method === 'DELETE') {
+      fetchOptions.method = 'DELETE';
+    }
+
+    const token = localStorage.getItem('token');
+    if (token) fetchOptions.headers['x-auth-token'] = token;
+
+    const res = await Promise.race([
+      fetch(url, fetchOptions),
+      timeout(TIMEOUT_SEC),
+    ]);
+
+    // For DELETE requests, there might not be a JSON body to parse
+    if (res.status === 204 || (res.status === 200 && method === 'DELETE'))
+      return;
     const data = await res.json();
 
-    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+    if (!res.ok) throw new Error(`${data.message || data.msg} (${res.status})`);
     return data;
   } catch (err) {
     throw err;

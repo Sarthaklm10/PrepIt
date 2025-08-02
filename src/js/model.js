@@ -1,6 +1,6 @@
 import { async } from 'regenerator-runtime';
 import { API_URL, RES_PER_PAGE, KEY } from './config.js';
-// import { getJSON, sendJSON } from './helpers.js';
+import { BACKEND_API_URL } from './config.js';
 import { AJAX } from './helpers.js';
 
 export const state = {
@@ -38,42 +38,205 @@ const createRecipeObject = function (data) {
 
 // Add a list of non-vegetarian ingredients
 const nonVegetarianIngredients = [
-  'beef', 'chicken', 'pork', 'lamb', 'veal', 'turkey', 'duck', 'goose', 'fish',
-  'salmon', 'tuna', 'cod', 'shrimp', 'prawn', 'crab', 'lobster', 'oyster', 'clam',
-  'mussel', 'squid', 'octopus', 'bacon', 'ham', 'sausage', 'pepperoni', 'steak',
-  'ground beef', 'ground pork', 'ground turkey', 'salami', 'anchovy', 'tilapia',
-  'halibut', 'venison', 'bison', 'quail', 'pheasant', 'meat', 'meatball', 'ribs',
-  'liver', 'kidney', 'tripe', 'bone marrow', 'bone broth', 'caviar', 'roe',
-  'gelatin', 'lard', 'suet', 'trout', 'mackerel', 'sardine', 'haddock', 'mahi mahi',
-  'sea bass', 'scallop', 'calamari', 'prosciutto', 'pancetta', 'chorizo', 'bologna',
-  'pastrami', 'corned beef', 'foie gras', 'hot dog', 'bratwurst', 'frankfurter',
-  'goat', 'lamb', 'veal', 'turkey', 'duck', 'goose', 'fish', 'salmon', 'tuna', 'cod', 'shrimp', 'prawn', 'crab', 'lobster', 'oyster', 'clam',
+  'beef',
+  'chicken',
+  'pork',
+  'lamb',
+  'veal',
+  'turkey',
+  'duck',
+  'goose',
+  'fish',
+  'salmon',
+  'tuna',
+  'cod',
+  'shrimp',
+  'prawn',
+  'crab',
+  'lobster',
+  'oyster',
+  'clam',
+  'mussel',
+  'squid',
+  'octopus',
+  'bacon',
+  'ham',
+  'sausage',
+  'pepperoni',
+  'steak',
+  'ground beef',
+  'ground pork',
+  'ground turkey',
+  'salami',
+  'anchovy',
+  'tilapia',
+  'halibut',
+  'venison',
+  'bison',
+  'quail',
+  'pheasant',
+  'meat',
+  'meatball',
+  'ribs',
+  'liver',
+  'kidney',
+  'tripe',
+  'bone marrow',
+  'bone broth',
+  'caviar',
+  'roe',
+  'gelatin',
+  'lard',
+  'suet',
+  'trout',
+  'mackerel',
+  'sardine',
+  'haddock',
+  'mahi mahi',
+  'sea bass',
+  'scallop',
+  'calamari',
+  'prosciutto',
+  'pancetta',
+  'chorizo',
+  'bologna',
+  'pastrami',
+  'corned beef',
+  'foie gras',
+  'hot dog',
+  'bratwurst',
+  'frankfurter',
+  'goat',
+  'lamb',
+  'veal',
+  'turkey',
+  'duck',
+  'goose',
+  'fish',
+  'salmon',
+  'tuna',
+  'cod',
+  'shrimp',
+  'prawn',
+  'crab',
+  'lobster',
+  'oyster',
+  'clam',
 ];
 
 // List of non-vegan ingredients (including dairy and eggs)
 const nonVeganIngredients = [
   ...nonVegetarianIngredients,
-  'milk', 'cheese', 'butter', 'cream', 'yogurt', 'egg', 'honey', 'whey', 'ghee',
-  'gelatin', 'mayonnaise', 'parmesan', 'mozzarella', 'cheddar', 'brie', 'ice cream',
-  'buttermilk', 'cottage cheese', 'ricotta', 'sour cream', 'custard', 'quark',
-  'casein', 'lactose', 'royal jelly', 'egg white', 'egg yolk', 'albumin',
-  'eggnog', 'feta', 'gouda', 'mascarpone', 'provolone', 'romano', 'blue cheese',
-  'camembert', 'condensed milk', 'evaporated milk', 'kefir', 'goat milk',
-  'heavy cream', 'half-and-half', 'skyr', 'frosting', 'meringue', 'hollandaise',
-  'aioli', 'béarnaise sauce', 'crème fraîche', 'whipped cream', 'milkshake'
+  'milk',
+  'cheese',
+  'butter',
+  'cream',
+  'yogurt',
+  'egg',
+  'honey',
+  'whey',
+  'ghee',
+  'gelatin',
+  'mayonnaise',
+  'parmesan',
+  'mozzarella',
+  'cheddar',
+  'brie',
+  'ice cream',
+  'buttermilk',
+  'cottage cheese',
+  'ricotta',
+  'sour cream',
+  'custard',
+  'quark',
+  'casein',
+  'lactose',
+  'royal jelly',
+  'egg white',
+  'egg yolk',
+  'albumin',
+  'eggnog',
+  'feta',
+  'gouda',
+  'mascarpone',
+  'provolone',
+  'romano',
+  'blue cheese',
+  'camembert',
+  'condensed milk',
+  'evaporated milk',
+  'kefir',
+  'goat milk',
+  'heavy cream',
+  'half-and-half',
+  'skyr',
+  'frosting',
+  'meringue',
+  'hollandaise',
+  'aioli',
+  'béarnaise sauce',
+  'crème fraîche',
+  'whipped cream',
+  'milkshake',
 ];
 
 // List of gluten-containing ingredients
 const glutenIngredients = [
-  'wheat', 'flour', 'barley', 'rye', 'malt', 'bread', 'pasta', 'couscous',
-  'semolina', 'spelt', 'durum', 'matzo', 'graham', 'seitan', 'bulgur',
-  'farina', 'soy sauce', 'wheat germ', 'wheat bran', 'wheat starch',
-  'cake flour', 'all-purpose flour', 'bread flour', 'pastry flour',
-  'noodles', 'cracker', 'cookie', 'pretzel', 'wafer', 'cereal', 'beer',
-  'ale', 'lager', 'whiskey', 'bourbon', 'rye whiskey', 'farro',
-  'orzo', 'panko', 'crouton', 'biscuit', 'croissant', 'bagel',
-  'pita', 'tortilla', 'udon', 'ramen', 'soba', 'triticale',
-  'kamut', 'einkorn', 'emmer', 'wheat berries', 'crumbs', 'batter'
+  'wheat',
+  'flour',
+  'barley',
+  'rye',
+  'malt',
+  'bread',
+  'pasta',
+  'couscous',
+  'semolina',
+  'spelt',
+  'durum',
+  'matzo',
+  'graham',
+  'seitan',
+  'bulgur',
+  'farina',
+  'soy sauce',
+  'wheat germ',
+  'wheat bran',
+  'wheat starch',
+  'cake flour',
+  'all-purpose flour',
+  'bread flour',
+  'pastry flour',
+  'noodles',
+  'cracker',
+  'cookie',
+  'pretzel',
+  'wafer',
+  'cereal',
+  'beer',
+  'ale',
+  'lager',
+  'whiskey',
+  'bourbon',
+  'rye whiskey',
+  'farro',
+  'orzo',
+  'panko',
+  'crouton',
+  'biscuit',
+  'croissant',
+  'bagel',
+  'pita',
+  'tortilla',
+  'udon',
+  'ramen',
+  'soba',
+  'triticale',
+  'kamut',
+  'einkorn',
+  'emmer',
+  'wheat berries',
+  'crumbs',
+  'batter',
 ];
 
 // Our current loaded recipe with ingredients
@@ -192,7 +355,7 @@ export const getFilteredResults = function () {
     state.search.filteredCount = 0;
     return [];
   }
-  
+
   // If diet filters object is missing, fix it
   if (!state.search.dietFilters) {
     state.search.dietFilters = {
@@ -201,35 +364,40 @@ export const getFilteredResults = function () {
       glutenFree: false,
     };
   }
-  
+
   // If no filters are active, return all results
   const { vegetarian, vegan, glutenFree } = state.search.dietFilters;
   console.log('Active filters:', { vegetarian, vegan, glutenFree });
-  
+
   if (!vegetarian && !vegan && !glutenFree) {
-    console.log('No filters active, returning all results:', state.search.results.length);
+    console.log(
+      'No filters active, returning all results:',
+      state.search.results.length
+    );
     state.search.filteredCount = state.search.results.length;
     return state.search.results;
   }
-  
+
   // Apply dietary filters based on our ingredient checking functions
   const filteredResults = state.search.results.filter(recipe => {
     if (vegetarian && !isVegetarian(recipe)) {
       return false;
     }
-    
+
     if (vegan && !isVegan(recipe)) {
       return false;
     }
-    
+
     if (glutenFree && !isGlutenFree(recipe)) {
       return false;
     }
-    
+
     return true;
   });
-  
-  console.log(`Filtered results: ${filteredResults.length} of ${state.search.results.length}`);
+
+  console.log(
+    `Filtered results: ${filteredResults.length} of ${state.search.results.length}`
+  );
   state.search.filteredCount = filteredResults.length;
   return filteredResults;
 };
@@ -239,10 +407,12 @@ export const getSearchResultsPage = function (page = state.search.page) {
 
   // Get filtered results
   const filteredResults = getFilteredResults();
-  
+
   // Calculate total pages
-  const totalPages = Math.ceil(filteredResults.length / state.search.resultsPerPage);
-  
+  const totalPages = Math.ceil(
+    filteredResults.length / state.search.resultsPerPage
+  );
+
   // If current page is greater than total pages and total pages > 0, reset to page 1
   if (state.search.page > totalPages && totalPages > 0) {
     state.search.page = 1;
@@ -267,52 +437,79 @@ const persistBookmarks = function () {
   localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
 };
 
-export const addBookmark = function (recipe) {
-  // Add bookmark
-  state.bookmarks.push(recipe);
+// export const addBookmark = function (recipe) {
+//   state.bookmarks.push(recipe);
+//   if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+//   persistBookmarks();
+// };
+// export const removeBookmark = function (id) {
+//   const index = state.bookmarks.findIndex(el => el.id === id);
+//   state.bookmarks.splice(index, 1);
+//   if (id === state.recipe.id) state.recipe.bookmarked = false;
+//   persistBookmarks();
+// };
 
-  // Mark current recipe as bookmarked
-  if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+export const addBookmark = async function (recipe) {
+  try {
+    const { id, title, publisher, image, sourceUrl } = recipe;
+    const bookmarkData = { id, title, publisher, image, sourceUrl };
 
-  persistBookmarks();
+    await AJAX(`${BACKEND_API_URL}/recipes`, bookmarkData);
+    if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+    state.bookmarks.push(recipe);
+  } catch (err) {
+    console.error('💥 Failed to add bookmark:', err.message);
+    throw err;
+  }
 };
 
-export const removeBookmark = function (id) {
-  // Delete bookmark
-  const index = state.bookmarks.findIndex(el => el.id === id);
-  state.bookmarks.splice(index, 1);
+export const removeBookmark = async function (id) {
+  try {
+    await AJAX(`${BACKEND_API_URL}/recipes/${id}`, undefined, 'DELETE');
 
-  // Mark current recipe as NOT bookmarked
-  if (id === state.recipe.id) state.recipe.bookmarked = false;
+    // Delete bookmark from local state
+    const index = state.bookmarks.findIndex(el => el.id === id);
+    state.bookmarks.splice(index, 1);
 
-  persistBookmarks();
+    // Mark current recipe as NOT bookmarked
+    if (id === state.recipe.id) state.recipe.bookmarked = false;
+  } catch (err) {
+    console.error('💥 Failed to remove bookmark:', err.message);
+    throw err;
+  }
 };
 
-const init = function () {
-  const storage = localStorage.getItem('bookmarks');
-  if (storage) state.bookmarks = JSON.parse(storage);
+export const loadBookmarks = async function () {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      state.bookmarks = [];
+      return; // Exit the function if no token is found
+    }
+    const data = await AJAX(`${BACKEND_API_URL}/recipes`);
+    state.bookmarks = data;
+  } catch (err) {
+    console.error('💥 Failed to load bookmarks:', err.message);
+    state.bookmarks = [];
+  }
 };
-init();
-
-const clearBookmarks = function () {
-  localStorage.clear('bookmarks');
-};
-// clearBookmarks();
 
 export const uploadRecipe = async function (newRecipe) {
   try {
     const ingredients = Object.entries(newRecipe)
-      .filter(entry => entry[0].startsWith("ingredient") && entry[1] !== "")
+      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
       .map(ing => {
         const ingArr = ing[1].split(',').map(el => el.trim());
         if (ingArr.length !== 3 || ingArr[2] === '')
-          throw new Error("Wrong format! Please use the format: 'Quantity,Unit,Description'");
+          throw new Error(
+            "Wrong format! Please use the format: 'Quantity,Unit,Description'"
+          );
 
         const [quantity, unit, description] = ingArr;
         return {
           quantity: quantity ? +quantity : null,
           unit,
-          description
+          description,
         };
       });
 
@@ -333,9 +530,18 @@ export const uploadRecipe = async function (newRecipe) {
 
     // Add bookmark to the new recipe
     addBookmark(state.recipe);
-
+  } catch (err) {
+    throw err;
   }
-  catch (err) {
+};
+
+export const loadUserRecipes = async function () {
+  try {
+    const data = await AJAX(`${BACKEND_API_URL}/recipes`);
+    console.log('User recipes loaded:', data);
+    state.bookmarks = data; // Or store in a new state property
+  } catch (err) {
+    console.error('💥 Failed to load user recipes:', err.message);
     throw err;
   }
 };
