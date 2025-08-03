@@ -8,7 +8,8 @@ import paginationView from './views/paginationView.js';
 import addRecipeView from './views/addRecipeView.js';
 import dietFiltersView from './views/dietFiltersView.js';
 import initTheme from './theme.js';
-
+import authView from './views/authView.js';
+import { KEY } from './config.js';
 import { async } from 'regenerator-runtime';
 import 'regenerator-runtime/runtime';
 import 'core-js/stable';
@@ -42,7 +43,6 @@ window.model = model;
 
 const container = document.querySelector('.container');
 
-// Fix scroll position without modifying recipeView.render
 const scrollToTop = function () {
   // Reset window scroll position
   window.scrollTo(0, 0);
@@ -52,9 +52,8 @@ const scrollToTop = function () {
   if (recipeContainer) recipeContainer.scrollTop = 0;
 };
 
-// Simplify the transition function to avoid breaking things
 const transitionViews = function (callback) {
-  // Apply a slight fade by adding a class to the container
+  // Slight fade by adding a class to the container
   const container = document.querySelector('.container');
   if (container) container.classList.add('fading');
 
@@ -82,6 +81,38 @@ const resetScroll = function () {
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
+};
+
+const controlAuth = async function (action, userData) {
+  try {
+    authView.renderSpinner();
+    if (action === 'register') {
+      await model.register(userData);
+    } else if (action === 'login') {
+      await model.login(userData);
+    }
+    authView.toggleWindow();
+    authView.updateNav(true, userData.username);
+    // Reload bookmarks for the logged-in user
+    controlBookmarks();
+  } catch (err) {
+    authView.renderError(err.message);
+  }
+};
+
+const controlLogout = function () {
+  model.logout();
+  authView.updateNav(false);
+  bookmarksView.render([]); // Render an empty bookmarks list
+};
+
+const checkUserStatus = function () {
+  const token = localStorage.getItem('token');
+  const username = localStorage.getItem('username');
+  if (token && username) {
+    authView.updateNav(true, username);
+    controlBookmarks();
+  }
 };
 
 // Update controlRecipes
@@ -132,9 +163,11 @@ const loadRecipeData = async function (id) {
     const API_URL = 'https://forkify-api.herokuapp.com/api/v2/recipes/';
     const KEY = '59a2f5e1-2f01-4604-a81e-8a64e6e95d0b';
 
+    // FASTER Response time
+    // const KEY = 'b94c6896-4db0-42e8-89df-2115c449c311';
     const res = await fetch(`${API_URL}${id}?key=${KEY}`);
-    const data = await res.json();
 
+    const data = await res.json();
     if (!res.ok) throw new Error(`${data.message} (${res.status})`);
 
     let { recipe } = data.data;
@@ -269,23 +302,20 @@ const controlServings = function (newServings) {
 };
 const controlAddBookmark = async function () {
   try {
-    if (!model.state.recipe.bookmarked) {
+    if (!localStorage.getItem('token'))
+      throw new Error('Please log in to bookmark recipes.');
+
+    if (!model.state.recipe.bookmarked)
       await model.addBookmark(model.state.recipe);
-    } else {
-      await model.removeBookmark(model.state.recipe.id);
-    }
-    // Update recipe view to show the filled/unfilled bookmark icon
+    else await model.removeBookmark(model.state.recipe.id);
+
     recipeView.update(model.state.recipe);
-    // Render the updated bookmarks list
     bookmarksView.render(model.state.bookmarks);
   } catch (err) {
-    // You can add a more user-friendly error message here
-    recipeView.renderError(
-      'Could not save bookmark. Please make sure you are logged in.'
-    );
+    // Call the new temporary message function instead of renderError
+    recipeView.renderTemporaryMessage(err.message);
   }
 };
-
 const controlBookmarks = async function () {
   try {
     // 1. Load bookmarks from the server
@@ -383,6 +413,12 @@ const controlDietFilter = function (filterType) {
 
 const init = function () {
   initTheme();
+
+  checkUserStatus();
+
+  authView.addHandlerAuth(controlAuth);
+  // Listen for clicks on the logout button
+  authView.addHandlerLogout(controlLogout);
 
   // Set initial layout state
   if (!model.state.search.query) {

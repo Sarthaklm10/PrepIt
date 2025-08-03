@@ -1,6 +1,6 @@
 export const API_URL = 'https://forkify-api.jonas.io/api/v2/recipes/';
 export const BACKEND_API_URL = 'http://localhost:5000/api';
-export const TIMEOUT_SEC = 10;
+export const TIMEOUT_SEC = 12;
 export const RES_PER_PAGE = 10;
 export const KEY = '9ac0dc87-33df-454e-becc-91851b9ec2f5';
 export const MODAL_CLOSE_SEC = 1.5;

@@ -239,6 +239,36 @@ const glutenIngredients = [
   'batter',
 ];
 
+export const login = async function (userData) {
+  try {
+    const data = await AJAX(`${BACKEND_API_URL}/login`, userData);
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('username', userData.username);
+    state.user = { username: userData.username, loggedIn: true };
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const register = async function (userData) {
+  try {
+    const data = await AJAX(`${BACKEND_API_URL}/register`, userData);
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('username', userData.username);
+    state.user = { username: userData.username, loggedIn: true };
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const logout = function () {
+  localStorage.removeItem('token');
+  localStorage.removeItem('username');
+  state.user = { loggedIn: false };
+  state.bookmarks = [];
+  location.reload();
+};
+
 // Our current loaded recipe with ingredients
 let loadedRecipeCache = {};
 

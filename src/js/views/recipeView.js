@@ -41,7 +41,7 @@ class RecipeView extends View {
   updateCategorySection(category, recipes) {
     const sectionId = `${category.slice(0, -1)}-section`;
     const section = document.getElementById(sectionId);
-    
+
     if (section) {
       const container = section.querySelector('.welcome-section__featured');
       if (container && recipes && recipes.length > 0) {
@@ -53,7 +53,7 @@ class RecipeView extends View {
   updateCategoryError(category) {
     const sectionId = `${category.slice(0, -1)}-section`;
     const section = document.getElementById(sectionId);
-    
+
     if (section) {
       const container = section.querySelector('.welcome-section__featured');
       if (container) {
@@ -63,7 +63,9 @@ class RecipeView extends View {
   }
 
   _addCategoryScrolling() {
-    const categoryLinks = document.querySelectorAll('.welcome-section__category-link');
+    const categoryLinks = document.querySelectorAll(
+      '.welcome-section__category-link'
+    );
     categoryLinks.forEach(link => {
       link.addEventListener('click', function (e) {
         e.preventDefault();
@@ -79,7 +81,9 @@ class RecipeView extends View {
   _generateMarkup() {
     return `
       <figure class="recipe__fig">
-        <img src="${this._data.image}" alt="${this._data.title}" class="recipe__img" />
+        <img src="${this._data.image}" alt="${
+      this._data.title
+    }" class="recipe__img" />
         <h1 class="recipe__title">
           <span>${this._data.title}</span>
         </h1>
@@ -90,23 +94,31 @@ class RecipeView extends View {
           <svg class="recipe__info-icon">
             <use href="${icons}#icon-clock"></use>
           </svg>
-          <span class="recipe__info-data recipe__info-data--minutes">${this._data.cookingTime}</span>
+          <span class="recipe__info-data recipe__info-data--minutes">${
+            this._data.cookingTime
+          }</span>
           <span class="recipe__info-text">minutes</span>
         </div>
         <div class="recipe__info">
           <svg class="recipe__info-icon">
             <use href="${icons}#icon-users"></use>
           </svg>
-          <span class="recipe__info-data recipe__info-data--people">${this._data.servings}</span>
+          <span class="recipe__info-data recipe__info-data--people">${
+            this._data.servings
+          }</span>
           <span class="recipe__info-text">servings</span>
 
           <div class="recipe__info-buttons">
-            <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings - 1}">
+            <button class="btn--tiny btn--update-servings" data-update-to="${
+              this._data.servings - 1
+            }">
               <svg>
                 <use href="${icons}#icon-minus-circle"></use>
               </svg>
             </button>
-            <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings + 1}">
+            <button class="btn--tiny btn--update-servings" data-update-to="${
+              this._data.servings + 1
+            }">
               <svg>
                 <use href="${icons}#icon-plus-circle"></use>
               </svg>
@@ -121,7 +133,9 @@ class RecipeView extends View {
         </div>
         <button class="btn--round btn--bookmark">
           <svg class="">
-            <use href="${icons}#icon-bookmark${this._data.bookmarked ? '-fill' : ''}"></use>
+            <use href="${icons}#icon-bookmark${
+      this._data.bookmarked ? '-fill' : ''
+    }"></use>
           </svg>
         </button>
       </div>
@@ -137,7 +151,9 @@ class RecipeView extends View {
         <h2 class="heading--2">How to cook it</h2>
         <p class="recipe__directions-text">
           This recipe was carefully designed and tested by
-          <span class="recipe__publisher">${this._data.publisher}</span>. Please check out
+          <span class="recipe__publisher">${
+            this._data.publisher
+          }</span>. Please check out
           directions at their website.
         </p>
         <a
@@ -160,7 +176,13 @@ class RecipeView extends View {
         <svg class="recipe__icon">
           <use href="${icons}#icon-check"></use>
         </svg>
-        <div class="recipe__quantity">${ing.quantity ? (ing.quantity % 1 === 0 ? ing.quantity : ing.quantity.toFixed(1)) : ''}</div>
+        <div class="recipe__quantity">${
+          ing.quantity
+            ? ing.quantity % 1 === 0
+              ? ing.quantity
+              : ing.quantity.toFixed(1)
+            : ''
+        }</div>
         <div class="recipe__description">
           <span class="recipe__unit">${ing.unit}</span>
           ${ing.description}
@@ -233,14 +255,17 @@ class RecipeView extends View {
   }
 
   _generateCategoryRecipes(recipes) {
-    if (!recipes.length) return `<p class="welcome-section__empty">No recipes found</p>`;
-    
-    return recipes.map(recipe => this._generateFeaturedRecipeCard(recipe)).join('');
+    if (!recipes.length)
+      return `<p class="welcome-section__empty">No recipes found</p>`;
+
+    return recipes
+      .map(recipe => this._generateFeaturedRecipeCard(recipe))
+      .join('');
   }
 
   _generateFeaturedRecipeCard(recipe) {
     if (!recipe || !recipe.id) return '';
-    
+
     return `
       <div class="welcome-section__card" onclick="window.location.hash='${recipe.id}'">
         <img src="${recipe.image}" alt="${recipe.title}" onerror="this.onerror=null; this.src='src/img/placeholder.png';">
@@ -259,7 +284,7 @@ class RecipeView extends View {
   render(data, render = true) {
     // Call parent's render method first
     super.render(data, render);
-    
+
     // After rendering, reset scroll position
     if (render && this._parentElement) {
       this._parentElement.scrollTop = 0;
@@ -267,7 +292,27 @@ class RecipeView extends View {
     }
   }
 
+  renderTemporaryMessage(message) {
+    const markup = `<div class="recipe__popup-message">${message}</div>`;
+
+    // Clear any existing popups first
+    const existingPopup = this._parentElement.querySelector(
+      '.recipe__popup-message'
+    );
+    if (existingPopup) existingPopup.remove();
+
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+
+    // Make the popup disappear after 2.5 seconds
+    setTimeout(() => {
+      const popup = this._parentElement.querySelector('.recipe__popup-message');
+      if (popup) {
+        popup.classList.add('hidden');
+        // Fully remove from DOM after the fade-out transition
+        popup.addEventListener('transitionend', () => popup.remove());
+      }
+    }, 2000);
+  }
 }
 
 export default new RecipeView();
-
