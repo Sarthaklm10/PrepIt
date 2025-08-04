@@ -136,18 +136,24 @@
             <li class="nav__item">
               <a href="add-recipe.html" class="nav__btn nav__btn--add-recipe">
                 <svg class="nav__icon">
-                  <use href="src/img/icons.svg#icon-plus-circle"></use>
+                  <use href="src/img/icons.svg#icon-edit"></use>
                 </svg>
                 <span>Create Recipe</span>
               </a>
             </li>
-            <li class="nav__item">
+            <li class="nav__item nav__item--my-recipes">
               <a href="bookmarks.html" class="nav__btn nav__btn--bookmarks">
                 <svg class="nav__icon">
-                  <use href="src/img/icons.svg#icon-heart"></use>
+                  <use href="src/img/icons.svg#icon-bookmark"></use>
                 </svg>
                 <span>My Recipes</span>
               </a>
+              <div class="nav__bookmarks-preview hidden">
+                <ul class="nav__bookmarks-list"></ul>
+                <div class="nav__bookmarks-more">
+                  <a href="bookmarks.html" class="btn btn--small">View All Recipes</a>
+                </div>
+              </div>
             </li>
           </ul>
           <button class="nav__btn nav__btn--theme" id="theme-toggle">
@@ -186,86 +192,7 @@
       </div>
     </div>
 
-    <div class="overlay hidden"></div>
-    <div class="add-recipe-window hidden">
-      <button class="btn--close-modal">&times;</button>
-      <form class="upload">
-        <div class="upload__column">
-          <h3 class="upload__heading">Recipe data</h3>
-          <label>Title</label>
-          <input value="TEST123" required name="title" type="text" />
-          <label>URL</label>
-          <input value="TEST123" required name="sourceUrl" type="text" />
-          <label>Image URL</label>
-          <input value="TEST123" required name="image" type="text" />
-          <label>Publisher</label>
-          <input value="TEST123" required name="publisher" type="text" />
-          <label>Prep time</label>
-          <input value="10" required name="cookingTime" type="number" />
-          <label>Servings</label>
-          <input value="20" required name="servings" type="number" />
-        </div>
 
-        <div class="upload__column">
-          <h3 class="upload__heading">Ingredients</h3>
-          <div class="ingredient-container">
-            <label>Ingredient 1</label>
-            <input
-              value="2,kg,Rice"
-              type="text"
-              required
-              name="ingredient-1"
-              placeholder="'Quantity,Unit,Description'"
-            />
-            <label>Ingredient 2</label>
-            <input
-              value="2,,Onion"
-              type="text"
-              name="ingredient-2"
-              placeholder="'Quantity,Unit,Description'"
-            />
-            <label>Ingredient 3</label>
-            <input
-              value=",,Potato"
-              type="text"
-              name="ingredient-3"
-              placeholder="'Quantity,Unit,Description'"
-            />
-            <label>Ingredient 4</label>
-            <input
-              type="text"
-              name="ingredient-4"
-              placeholder="'Quantity,Unit,Description'"
-            />
-            <label>Ingredient 5</label>
-            <input
-              type="text"
-              name="ingredient-5"
-              placeholder="'Quantity,Unit,Description'"
-            />
-            <label>Ingredient 6</label>
-            <input
-              type="text"
-              name="ingredient-6"
-              placeholder="'Quantity,Unit,Description'"
-            />
-          </div>
-          <button type="button" class="btn btn--small btn--add-ingredient">
-            <svg>
-              <use href="src/img/icons.svg#icon-plus-circle"></use>
-            </svg>
-            <span>Add Ingredient</span>
-          </button>
-        </div>
-
-        <button class="btn upload__btn">
-          <svg>
-            <use href="src/img/icons.svg#icon-upload-cloud"></use>
-          </svg>
-          <span>Upload</span>
-        </button>
-      </form>
-    </div>
 
     <div class="auth-window hidden">
       <button class="btn--close-modal">&times;</button>

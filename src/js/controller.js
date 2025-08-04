@@ -473,7 +473,65 @@ const init = function () {
   // Add event listener for hash changes to reset scroll
   window.addEventListener('hashchange', resetScroll);
   window.model = model;
+  
+  // Add hover functionality for My Recipes
+  initMyRecipesHover();
 };
+const initMyRecipesHover = function () {
+  const myRecipesItem = document.querySelector('.nav__item--my-recipes');
+  const previewContainer = document.querySelector('.nav__bookmarks-preview');
+  const previewList = document.querySelector('.nav__bookmarks-list');
+  
+  if (!myRecipesItem || !previewContainer || !previewList) return;
+  
+  let hoverTimeout;
+  
+  myRecipesItem.addEventListener('mouseenter', async function () {
+    clearTimeout(hoverTimeout);
+    try {
+      await model.loadBookmarks();
+      const bookmarks = model.state.bookmarks.slice(0, 5); // Show only first 5
+      
+      if (bookmarks.length === 0) {
+        previewList.innerHTML = '<li class="nav__bookmark-empty">No saved recipes yet</li>';
+      } else {
+        const markup = bookmarks.map(bookmark => `
+          <li class="nav__bookmark-item">
+            <a href="/?id=${bookmark.id}" class="nav__bookmark-link">
+              <img src="${bookmark.image}" alt="${bookmark.title}" class="nav__bookmark-image" />
+              <div class="nav__bookmark-info">
+                <span class="nav__bookmark-title">${bookmark.title.length > 25 ? bookmark.title.slice(0, 25) + '...' : bookmark.title}</span>
+                <span class="nav__bookmark-publisher">${bookmark.publisher}</span>
+              </div>
+            </a>
+          </li>
+        `).join('');
+        previewList.innerHTML = markup;
+      }
+      
+      previewContainer.classList.remove('hidden');
+    } catch (err) {
+      console.error('Failed to load bookmarks preview:', err);
+      previewList.innerHTML = '<li class="nav__bookmark-empty">Failed to load recipes</li>';
+      previewContainer.classList.remove('hidden');
+    }
+  });
+  
+  myRecipesItem.addEventListener('mouseleave', function () {
+    hoverTimeout = setTimeout(() => {
+      previewContainer.classList.add('hidden');
+    }, 200); // Small delay to allow moving to preview
+  });
+  
+  previewContainer.addEventListener('mouseenter', function () {
+    clearTimeout(hoverTimeout);
+  });
+  
+  previewContainer.addEventListener('mouseleave', function () {
+    previewContainer.classList.add('hidden');
+  });
+};
+
 init();
 
 const clear = function () {

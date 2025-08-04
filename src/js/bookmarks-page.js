@@ -5,24 +5,31 @@ const container = document.querySelector('.container');
 const bookmarksGrid = document.querySelector('.bookmarks-grid');
 const emptyState = document.querySelector('.empty-state');
 
-const init = function () {
+const init = async function () {
   initTheme();
-  loadBookmarks();
+  await loadBookmarks();
 };
 
-const loadBookmarks = function () {
-  const bookmarks = model.state.bookmarks;
-  
-  if (bookmarks.length === 0) {
+const loadBookmarks = async function () {
+  try {
+    await model.loadBookmarks();
+    const bookmarks = model.state.bookmarks;
+    
+    if (bookmarks.length === 0) {
+      bookmarksGrid.classList.add('hidden');
+      emptyState.classList.remove('hidden');
+      return;
+    }
+    
+    emptyState.classList.add('hidden');
+    bookmarksGrid.classList.remove('hidden');
+    
+    renderBookmarks(bookmarks);
+  } catch (err) {
+    console.error('Failed to load bookmarks:', err);
     bookmarksGrid.classList.add('hidden');
     emptyState.classList.remove('hidden');
-    return;
   }
-  
-  emptyState.classList.add('hidden');
-  bookmarksGrid.classList.remove('hidden');
-  
-  renderBookmarks(bookmarks);
 };
 
 const renderBookmarks = function (bookmarks) {
@@ -77,7 +84,7 @@ const addBookmarkEventListeners = function () {
       const recipeId = bookmarkCard.dataset.id;
       
       // Remove from model
-      model.deleteBookmark(recipeId);
+      model.removeBookmark(recipeId);
       
       // Remove from display
       bookmarkCard.remove();

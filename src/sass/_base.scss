@@ -1,11 +1,11 @@
-// Light Mode Colors
-$color-primary: #2563eb; // Royal Blue
-$color-primary-light: #3b82f6; // Lighter Blue
-$color-primary-dark: #1d4ed8; // Darker Blue
+// Light Mode Colors - New Purple/Pink Theme
+$color-primary: #7c3aed; // Vibrant Purple
+$color-primary-light: #a855f7; // Light Purple
+$color-primary-dark: #5b21b6; // Dark Purple
 
 // Gradients
 $gradient: linear-gradient(135deg, $color-primary-light, $color-primary);
-$bg-gradient: linear-gradient(135deg, #dbeafe, #eff6ff);
+$bg-gradient: linear-gradient(135deg, #f3e8ff, #ede9fe);
 
 // Theme Colors
 :root {
@@ -15,39 +15,39 @@ $bg-gradient: linear-gradient(135deg, #dbeafe, #eff6ff);
   --color-primary-dark: #{$color-primary-dark};
   
   --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f8fafc;
-  --color-bg-tertiary: #f1f5f9;
+  --color-bg-secondary: #faf5ff;
+  --color-bg-tertiary: #f3e8ff;
   
-  --color-text-primary: #1e293b;
-  --color-text-secondary: #475569;
-  --color-text-tertiary: #64748b;
+  --color-text-primary: #1e1b4b;
+  --color-text-secondary: #4338ca;
+  --color-text-tertiary: #6366f1;
   
-  --color-border: #e2e8f0;
-  --color-shadow: rgba(15, 23, 42, 0.1);
+  --color-border: #e0e7ff;
+  --color-shadow: rgba(124, 58, 237, 0.15);
   
-  --color-success: #22c55e;
-  --color-danger: #ef4444;
+  --color-success: #10b981;
+  --color-danger: #f43f5e;
   
   --gradient: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
-  --bg-gradient: linear-gradient(135deg, #dbeafe, #eff6ff);
+  --bg-gradient: linear-gradient(135deg, #f3e8ff, #ede9fe);
 }
 
 // Dark Mode
 [data-theme="dark"] {
   --color-primary: #{$color-primary-light};
-  --color-primary-light: #60a5fa;
+  --color-primary-light: #c084fc;
   --color-primary-dark: #{$color-primary};
   
-  --color-bg-primary: #0f172a;
-  --color-bg-secondary: #1e293b;
-  --color-bg-tertiary: #334155;
+  --color-bg-primary: #0f0a1e;
+  --color-bg-secondary: #1e1238;
+  --color-bg-tertiary: #312e81;
   
   --color-text-primary: #f8fafc;
-  --color-text-secondary: #e2e8f0;
-  --color-text-tertiary: #cbd5e1;
+  --color-text-secondary: #e0e7ff;
+  --color-text-tertiary: #c7d2fe;
   
-  --color-border: #334155;
-  --color-shadow: rgba(0, 0, 0, 0.3);
+  --color-border: #312e81;
+  --color-shadow: rgba(124, 58, 237, 0.4);
   
   --color-success: #16a34a;
   --color-danger: #dc2626;
