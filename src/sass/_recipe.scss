@@ -5,6 +5,9 @@
     transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   opacity: 1;
   transform: translateY(0);
+  border-radius: 1.5rem;
+  box-shadow: 0 1rem 3rem var(--color-shadow);
+  margin: 2rem;
 
   &.transitioning {
     opacity: 0;
@@ -12,9 +15,11 @@
   }
 
   &__fig {
-    height: 32rem;
+    height: 35rem;
     position: relative;
     transform-origin: top;
+    border-radius: 1.5rem 1.5rem 0 0;
+    overflow: hidden;
 
     &::before {
       content: '';
@@ -24,12 +29,14 @@
       position: absolute;
       top: 0;
       left: 0;
-      background-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.1),
-        rgba(0, 0, 0, 0.5)
+      background: linear-gradient(
+        135deg,
+        rgba(37, 99, 235, 0.3),
+        rgba(59, 130, 246, 0.1),
+        rgba(0, 0, 0, 0.6)
       );
-      opacity: 0.6;
+      opacity: 0.8;
+      z-index: 1;
     }
   }
 
@@ -42,27 +49,33 @@
 
   &__title {
     position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translate(-50%, 20%) skewY(-6deg);
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
     color: #fff;
-    font-weight: 700;
-    font-size: 3.25rem;
-    text-transform: uppercase;
-    width: 50%;
-    line-height: 1.95;
-    text-align: center;
+    font-weight: 800;
+    font-size: 3rem;
+    text-transform: none;
+    line-height: 1.2;
+    text-align: left;
     font-family: var(--font-display);
+    z-index: 2;
+    text-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
 
     span {
-      -webkit-box-decoration-break: clone;
-      box-decoration-break: clone;
-      padding: 1.3rem 2rem;
-      background-image: var(--gradient);
+      display: inline-block;
+      padding: 0.8rem 1.5rem;
+      background: rgba(37, 99, 235, 0.9);
+      border-radius: 0.8rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     @media only screen and (max-width: $bp-medium) {
-      width: 70%;
+      font-size: 2.4rem;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      right: 1.5rem;
     }
   }
 
@@ -216,18 +229,21 @@
 
   &__title {
     font-family: var(--font-display);
-    font-size: 4.8rem;
-    font-weight: 700;
-    color: var(--color-primary);
-    margin-bottom: 2rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 4.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    text-transform: none;
+    letter-spacing: -0.02em;
   }
 
   &__subtitle {
     font-family: var(--font-primary);
-    font-size: 2.2rem;
-    font-weight: 500;
+    font-size: 1.8rem;
+    font-weight: 400;
     color: var(--color-text-secondary);
     margin-bottom: 4rem;
     max-width: 60rem;
@@ -236,13 +252,24 @@
 
   &__category-title {
     font-family: var(--font-heading);
-    font-size: 3.6rem;
-    font-weight: 600;
+    font-size: 2.8rem;
+    font-weight: 700;
     color: var(--color-primary);
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     text-align: left;
     padding-left: 2rem;
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    &::before {
+      content: '';
+      width: 4px;
+      height: 3rem;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+      border-radius: 2px;
+    }
 
     &::after {
       content: '';

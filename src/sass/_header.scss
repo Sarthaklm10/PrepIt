@@ -21,6 +21,7 @@
   width: auto;
   flex-shrink: 0;
   min-width: 10rem;
+  position: relative;
 }
 
 .header__logo {
@@ -32,10 +33,16 @@
 .header__logo-light {
   opacity: 1;
   visibility: visible;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .header__logo-dark {
   opacity: 0;
   visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* On dark theme, simply flip the opacity */
@@ -248,6 +255,7 @@
     height: 100%;
     min-width: 7rem;
     border-radius: 0.8rem;
+    text-decoration: none;
 
     svg {
       height: 1.8rem;
