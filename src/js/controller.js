@@ -127,6 +127,8 @@ const controlRecipes = async function () {
         controlWelcomePage();
       } else {
         container.classList.remove('fullscreen-mode');
+        // Show diet filters if we have search results
+        showDietFilters();
         recipeView.renderMessage('Select a recipe to view details.');
       }
       return;
@@ -134,6 +136,12 @@ const controlRecipes = async function () {
 
     // Recipe selected - normal layout
     container.classList.remove('fullscreen-mode');
+    
+    // Show diet filters if we have search results
+    if (model.state.search.query) {
+      showDietFilters();
+    }
+    
     recipeView.renderSpinner();
 
     // Update results view to mark selected search result
@@ -190,6 +198,9 @@ const loadRecipeData = async function (id) {
 
 // Function to initialize the welcome page and start loading categories
 const controlWelcomePage = function () {
+  // Hide diet filters on welcome page
+  hideDietFilters();
+  
   // Render the welcome page with empty categories
   recipeView.renderWelcomePage({});
 
@@ -229,13 +240,28 @@ const loadCategoryRecipes = async function (category, ids) {
   }
 };
 
+const showDietFilters = function() {
+  const dietFiltersElement = document.querySelector('.diet-filters');
+  if (dietFiltersElement) {
+    dietFiltersElement.classList.remove('hidden');
+  }
+};
+
+const hideDietFilters = function() {
+  const dietFiltersElement = document.querySelector('.diet-filters');
+  if (dietFiltersElement) {
+    dietFiltersElement.classList.add('hidden');
+  }
+};
+
 // Update controlSearchResults to use transition
 const controlSearchResults = async function () {
   try {
     const query = searchView.getQuery();
 
     if (!query) {
-      // No search - show welcome page
+      // No search - show welcome page and hide filters
+      hideDietFilters();
       transitionViews(() => {
         container.classList.add('fullscreen-mode');
         controlWelcomePage();
@@ -243,7 +269,7 @@ const controlSearchResults = async function () {
       return;
     }
 
-    // Search active - show results
+    // Search active - show results and filters
     transitionViews(() => {
       container.classList.remove('fullscreen-mode');
       resultsView.renderSpinner();
@@ -257,6 +283,9 @@ const controlSearchResults = async function () {
     Object.keys(model.state.search.dietFilters).forEach(key => {
       model.state.search.dietFilters[key] = false;
     });
+
+    // Show diet filters
+    showDietFilters();
 
     // Clear diet filters container before rendering
     if (dietFiltersView._parentElement) {
