@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="src/sass/main.scss" />
     <script defer type="module" src="src/js/controller.js"></script>
 
-    <title>PrepIt The-Ultimate Recipe Search Engine</title>
+    <title>PrepIt-Your Ultimate Recipe Search Engine</title>
   </head>
 
   <body>
@@ -52,62 +52,6 @@
           </button>
         </form>
 
-        <!-- <nav class="nav">
-          <ul class="nav__list">
-            <li class="nav__item nav__item--auth">
-              <button class="nav__btn nav__btn--login">
-                <svg class="nav__icon">
-                  <use href="src/img/icons.svg#icon-user"></use>
-                </svg>
-                <span>Login</span>
-              </button>
-
-              <div class="nav__user hidden">
-                <button class="nav__btn nav__btn--user">
-                  <svg class="nav__icon">
-                    <use href="src/img/icons.svg#icon-user"></use>
-                  </svg>
-                  <span class="nav__user-name">User</span>
-                </button>
-                <div class="nav__user-menu">
-                  <button class="nav__btn nav__btn--logout">Logout</button>
-                </div>
-              </div>
-            </li>
-            <li class="nav__item">
-              <button class="nav__btn nav__btn--add-recipe">
-                <svg class="nav__icon">
-                  <use href="src/img/icons.svg#icon-edit"></use>
-                </svg>
-                <span>Add recipe</span>
-              </button>
-            </li>
-            <li class="nav__item">
-              <button class="nav__btn nav__btn--bookmarks">
-                <svg class="nav__icon">
-                  <use href="src/img/icons.svg#icon-bookmark"></use>
-                </svg>
-                <span>Bookmarks</span>
-              </button>
-              <div class="bookmarks">
-                <ul class="bookmarks__list"></ul>
-              </div>
-            </li>
-          </ul>
-          <button class="nav__btn nav__btn--theme" id="theme-toggle">
-            <svg class="nav__icon nav__icon--sun">
-              <use href="src/img/icons.svg#icon-sun"></use>
-            </svg>
-            <svg class="nav__icon nav__icon--moon">
-              <use href="src/img/icons.svg#icon-moon"></use>
-            </svg>
-          </button>
-          <button class="nav__btn nav__btn--mobile-nav">
-            <svg class="nav__icon">
-              <use href="src/img/icons.svg#icon-menu"></use>
-            </svg>
-          </button>
-        </nav> -->
         <nav class="nav">
           <ul class="nav__list">
             <li class="nav__item nav__item--auth">
@@ -129,6 +73,10 @@
                   <button class="nav__btn nav__btn--logout">Logout</button>
                 </div>
               </div>
+            </li>
+
+            <li class="nav__item nav__item--filters hidden">
+              <div class="diet-filters"></div>
             </li>
 
             <li class="nav__item">
@@ -274,7 +222,6 @@
     </div>
 
     <script>
-      // Force remove error message and show welcome page
       document.addEventListener('DOMContentLoaded', function () {
         if (!window.location.hash) {
           const recipeContainer = document.querySelector('.recipe');

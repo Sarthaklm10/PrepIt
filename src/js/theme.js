@@ -6,11 +6,13 @@ const initTheme = () => {
     if (savedTheme) {
       return savedTheme;
     }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
   };
 
   // Apply theme to document
-  const applyTheme = (theme) => {
+  const applyTheme = theme => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
   };
@@ -30,11 +32,13 @@ const initTheme = () => {
   }
 
   // Listen for system theme changes
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    if (!localStorage.getItem('theme')) {
-      applyTheme(e.matches ? 'dark' : 'light');
-    }
-  });
+  window
+    .matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', e => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
 };
 
-export default initTheme; 
+export default initTheme;

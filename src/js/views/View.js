@@ -146,6 +146,7 @@ export default class View {
     `;
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
+    window.scrollTo(0, 0);
   }
 
   /**

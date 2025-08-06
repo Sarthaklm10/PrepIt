@@ -161,10 +161,9 @@ const loadRecipeData = async function (id) {
   try {
     // Create a temporary API request to get recipe data
     const API_URL = 'https://forkify-api.herokuapp.com/api/v2/recipes/';
-    const KEY = '59a2f5e1-2f01-4604-a81e-8a64e6e95d0b';
-
+    
     // FASTER Response time
-    // const KEY = 'b94c6896-4db0-42e8-89df-2115c449c311';
+    // const KEY = '0c876f3e-24f3-40c4-bafe-61da0fe30476';
     const res = await fetch(`${API_URL}${id}?key=${KEY}`);
 
     const data = await res.json();
@@ -230,12 +229,65 @@ const loadCategoryRecipes = async function (category, ids) {
 };
 
 // Update controlSearchResults to use transition
+// const controlSearchResults = async function () {
+//   try {
+//     const query = searchView.getQuery();
+
+//     if (!query) {
+//       // No search - show welcome page
+//       transitionViews(() => {
+//         container.classList.add('fullscreen-mode');
+//         controlWelcomePage();
+//       });
+//       return;
+//     }
+
+//     // Search active - show results
+//     transitionViews(() => {
+//       container.classList.remove('fullscreen-mode');
+//       resultsView.renderSpinner();
+//     });
+
+//     // Load search results
+//     await model.loadSearchResults(query);
+//     console.log('Search results loaded:', model.state.search.results.length);
+
+//     // Reset diet filters
+//     Object.keys(model.state.search.dietFilters).forEach(key => {
+//       model.state.search.dietFilters[key] = false;
+//     });
+
+//     // Clear diet filters container before rendering
+//     if (dietFiltersView._parentElement) {
+//       dietFiltersView._parentElement.innerHTML = '';
+//     }
+
+//     // Render diet filters
+//     dietFiltersView.render({});
+
+//     // Render search results
+//     resultsView.render(model.getSearchResultsPage(1));
+
+//     // RENDER PAGINATION
+//     paginationView.render(model.state.search);
+
+//     // If no hash, show empty recipe view with message
+//     if (!window.location.hash) {
+//       recipeView.renderMessage('Select a recipe to view details.');
+//     }
+//   } catch (err) {
+//     console.error('Search error:', err);
+//     resultsView.renderError();
+//   }
+// };
+
 const controlSearchResults = async function () {
+  const filtersEl = document.querySelector('.nav__item--filters'); // Get the new li element
   try {
     const query = searchView.getQuery();
 
     if (!query) {
-      // No search - show welcome page
+      filtersEl.classList.add('hidden');
       transitionViews(() => {
         container.classList.add('fullscreen-mode');
         controlWelcomePage();
@@ -243,39 +295,17 @@ const controlSearchResults = async function () {
       return;
     }
 
-    // Search active - show results
+    filtersEl.classList.remove('hidden');
+
     transitionViews(() => {
       container.classList.remove('fullscreen-mode');
       resultsView.renderSpinner();
     });
 
-    // Load search results
     await model.loadSearchResults(query);
-    console.log('Search results loaded:', model.state.search.results.length);
-
-    // Reset diet filters
-    Object.keys(model.state.search.dietFilters).forEach(key => {
-      model.state.search.dietFilters[key] = false;
-    });
-
-    // Clear diet filters container before rendering
-    if (dietFiltersView._parentElement) {
-      dietFiltersView._parentElement.innerHTML = '';
-    }
-
-    // Render diet filters
-    dietFiltersView.render({});
-
-    // Render search results
+    dietFiltersView.render({}); // Re-render the filters
     resultsView.render(model.getSearchResultsPage(1));
-
-    // RENDER PAGINATION
     paginationView.render(model.state.search);
-
-    // If no hash, show empty recipe view with message
-    if (!window.location.hash) {
-      recipeView.renderMessage('Select a recipe to view details.');
-    }
   } catch (err) {
     console.error('Search error:', err);
     resultsView.renderError();

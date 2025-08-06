@@ -9,7 +9,7 @@
 .results {
   list-style: none;
   margin-bottom: 2rem;
-  
+
   &:empty {
     min-height: 30rem;
   }
@@ -58,7 +58,7 @@
     &--prev {
       margin-right: auto;
     }
-    
+
     &--next {
       margin-left: auto;
     }

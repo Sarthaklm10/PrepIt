@@ -1,78 +1,50 @@
+/* --- STYLES FOR AUTH MODAL --- */
 .auth-window {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 50rem;
+  max-width: 90vw;
   background-color: var(--color-bg-primary);
   border-radius: 12px;
   padding: 4rem 5rem;
   box-shadow: 0 2rem 4rem var(--color-shadow);
   z-index: 1000;
-  transition: all 0.4s;
 }
-
 .auth__form {
   display: grid;
-  grid-template-columns: 1fr;
   gap: 1.5rem;
-
   label {
     font-size: 1.6rem;
     font-weight: 600;
-    color: var(--color-text-primary);
   }
-
   input {
     font-size: 1.6rem;
     padding: 1.2rem 1.5rem;
     border: 2px solid var(--color-border);
     border-radius: 8px;
     width: 100%;
-    box-sizing: border-box;
   }
 }
-
 .auth__heading {
   font-size: 2.25rem;
   font-weight: 600;
-  color: var(--color-text-primary);
   text-transform: uppercase;
   margin-bottom: 1.5rem;
   text-align: center;
 }
-
 .auth__btn {
   margin-top: 1rem;
   justify-self: center;
 }
 
-.auth__switch-text {
-  text-align: center;
-  font-size: 1.4rem;
-  color: var(--color-text-secondary);
-}
-
-.auth__switch-link {
-  color: var(--color-primary);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-/* --- STYLES FOR LOGGED-IN USER MENU --- */
-
-/* The parent list item is the relative container */
-.nav__item--auth {
-  &:hover .nav__user-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-}
-
-.nav__user-menu {
+/* --- STYLES FOR LOGGED-IN USER & OTHER DROPDOWNS --- */
+.nav__user-menu,
+.bookmarks,
+.diet-filters__menu {
   position: absolute;
-  top: 110%; /* Position slightly below the nav bar */
+  top: 90%;
   right: 0;
   background-color: var(--color-bg-primary);
   border-radius: 8px;
@@ -82,23 +54,30 @@
   width: max-content;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(5px);
-  transition: all 0.2s;
+  transform: translateY(10px);
+  transition: all 0.3s;
+}
+
+.nav__item--auth:hover .nav__user-menu,
+.nav__btn--bookmarks:hover + .bookmarks,
+.bookmarks:hover,
+.diet-filters:hover .diet-filters__menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .nav__btn.nav__btn--logout {
   width: 100%;
   padding: 0.8rem 2rem;
-  justify-content: flex-start; /* Align text to the left */
+  justify-content: flex-start;
   color: var(--color-text-secondary);
   background: none;
-
   &:hover {
     background-color: var(--color-bg-tertiary);
     color: var(--color-primary);
-    transform: none; /* Disable the scale effect */
+    transform: none;
   }
-
   svg {
     display: none;
   }
